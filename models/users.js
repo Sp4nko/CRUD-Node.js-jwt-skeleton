@@ -32,7 +32,10 @@ module.exports = (db, DataTypes) => {
 
         sequelize: db,
         modelName: 'User',
-        tableName: 'users'
+        tableName: 'users',
+        createdAt: 'created_at',
+        updatedAt: 'updated_at'
+
     })
 
     return User
