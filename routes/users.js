@@ -16,4 +16,8 @@ router.get('/', function(req, res, next) {
   });
 });
 
+// router.post('/login', (req, res, next) => {
+//   res.json('{"key:"value"}')
+// })
+
 module.exports = router;
