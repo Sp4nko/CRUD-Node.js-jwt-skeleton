@@ -27,6 +27,10 @@ module.exports = (db, DataTypes) => {
         password: {
             type: DataTypes.STRING,
             allowNull: false
+        },
+        active: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false
         }
     }, {
 
