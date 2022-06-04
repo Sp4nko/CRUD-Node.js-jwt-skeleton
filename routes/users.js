@@ -5,6 +5,10 @@ const Sequelize = require('sequelize');
 const db = require('../config/db')
 const User = require('../models/users')(db, Sequelize)
 const UserSessions = require('../models/user_sessions').init(db, Sequelize)
+const User_permissions = require('../models/user_permissions').init(db, Sequelize)
+const {create_token, verify_token, verify_permssion, get_user_permissions} = require("../middleware/auth");
+
+
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
@@ -40,19 +44,18 @@ router.get('/:id', function (req, res, next) {
 
 //login user by POST METHOD
 router.post('/login', (req, res) => {
+  User.hasMany(User_permissions, {foreignKey: 'user_id'});
   const {email, password} = req.body;
   User.findOne({
-    where: { email: email, password: password }})
+    where: { email: email, password: password }, include: [{
+      model: User_permissions
+    }]
+}) 
     .then(userFound => {
       if (userFound){
-        UserSessions.create({
-          locked: false,
-          _date: 1,
-          token: 'x',
-          user_id: 1,
-          active: true
-
-        })
+        console.log(userFound)
+        create_token(userFound)
+  
         
       }
       res.json(userFound)
