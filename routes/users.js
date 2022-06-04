@@ -1,11 +1,10 @@
 var express = require('express');
-const {
-  where
-} = require('sequelize');
+
 var router = express.Router();
 const Sequelize = require('sequelize');
 const db = require('../config/db')
 const User = require('../models/users')(db, Sequelize)
+const UserSessions = require('../models/user_sessions').init(db, Sequelize)
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
@@ -38,6 +37,27 @@ router.get('/:id', function (req, res, next) {
     });
 });
 
+
+//login user by POST METHOD
+router.post('/login', (req, res) => {
+  const {email, password} = req.body;
+  User.findOne({
+    where: { email: email, password: password }})
+    .then(userFound => {
+      if (userFound){
+        UserSessions.create({
+          locked: false,
+          _date: 1,
+          token: 'x',
+          user_id: 1,
+          active: true
+
+        })
+        
+      }
+      res.json(userFound)
+    })
+})
 
 //creating user by POST METHOD
 router.post('/insertUser', (req, res) => {
